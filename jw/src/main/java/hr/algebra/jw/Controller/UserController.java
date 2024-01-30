@@ -35,7 +35,6 @@ public class UserController {
         return "register";
     }
 
-
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -46,7 +45,6 @@ public class UserController {
         model.addAttribute("user", userDetails);
         return "user/index";
     }
-
     @GetMapping("/admin")
     public String adminPage(Model model, Principal principal) {
         UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
@@ -54,6 +52,5 @@ public class UserController {
         return "admin/index";
 
     }
-
 
 }

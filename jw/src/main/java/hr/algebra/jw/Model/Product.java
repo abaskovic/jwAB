@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "products")
+@Table(name = "productsN")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,11 +20,24 @@ public class Product {
     private Long id;
 
     private String name;
-    private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     private double price;
+
     @Column(columnDefinition = "TEXT")
     private String description;
     private Date createdAt;
-    private  String imageFileName;
+    private String imageFileName;
+
+    public Product(String name, Category category, double price, String description, String imageFileName, Date createdAt) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.description = description;
+        this.imageFileName = imageFileName;
+        this.createdAt = createdAt;
+    }
 }

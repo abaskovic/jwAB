@@ -1,5 +1,13 @@
+
 body {
+    padding-top: 56px;
     background-color: #f8f9fa;
+}
+
+@media (min-width: 768px) {
+    body {
+        padding-top: 80px;
+    }
 }
 
 .registration-container {
