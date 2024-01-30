@@ -1,7 +1,6 @@
 package hr.algebra.jw.Controller;
 
 import hr.algebra.jw.Dto.UserDto;
-import hr.algebra.jw.Model.User;
 import hr.algebra.jw.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,18 +40,19 @@ public class UserController {
     public String login() {
         return "login";
     }
-    @GetMapping("/user-page")
+    @GetMapping("/user/")
     public String userPage(Model model, Principal principal) {
         UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", userDetails);
-        return "user-page";
+        return "user/index";
     }
 
-    @GetMapping("/admin-page")
+    @GetMapping("/admin")
     public String adminPage(Model model, Principal principal) {
         UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", userDetails);
-        return "admin-page";
+        return "admin/index";
+
     }
 
 

@@ -32,16 +32,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(c-> c.disable())
-                .authorizeHttpRequests(request -> request.requestMatchers("/admin-page").hasAuthority("ADMIN")
-                        .requestMatchers("user-page").hasAuthority("USER").requestMatchers("register", "css/**", "shop")
+                .authorizeHttpRequests(request -> request.requestMatchers("admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("user/**").hasAuthority("USER").requestMatchers("register", "css/**", "shop")
                         .permitAll().anyRequest().authenticated())
                 .formLogin(form-> form.loginPage("/login").loginProcessingUrl("/login").successHandler(customSuccessHandler).permitAll())
                 .logout(form -> form.invalidateHttpSession(true).clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout").permitAll());
-
-
         return  httpSecurity.build();
-
     }
 
     @Autowired
