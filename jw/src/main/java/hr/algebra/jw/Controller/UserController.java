@@ -1,56 +1,25 @@
 package hr.algebra.jw.Controller;
 
-import hr.algebra.jw.Dto.UserDto;
-import hr.algebra.jw.Services.UserService;
+import hr.algebra.jw.Model.Log;
+import hr.algebra.jw.Repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
+import java.util.List;
 
+@RequestMapping("/user")
 @Controller
 public class UserController {
-
     @Autowired
-    private UserService userService;
+    private LogRepository repository;
 
-    @Autowired
-    UserDetailsService  userDetailsService;
 
-    @GetMapping("/register")
-    public String showRegistrationForm(@ModelAttribute("user") UserDto userDto) {
-        return "register";
-    }
-    @PostMapping("register")
-    public String saveUser(@ModelAttribute("user")UserDto userDto, Model model){
-        userDto.setRole("USER");
-        userService.save(userDto);
 
-        model.addAttribute("message", "REGISTRED SUCCESSFULY");
-        return "register";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-    @GetMapping("/user")
-    public String userPage(Model model, Principal principal) {
-        UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
-        return "user/index";
-    }
-    @GetMapping("/admin")
-    public String adminPage(Model model, Principal principal) {
-        UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
-        return "admin/index";
-
-    }
 
 }
+
+
