@@ -39,7 +39,7 @@ public class UserController {
     public String login() {
         return "login";
     }
-    @GetMapping("/user/")
+    @GetMapping("/user")
     public String userPage(Model model, Principal principal) {
         UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", userDetails);
