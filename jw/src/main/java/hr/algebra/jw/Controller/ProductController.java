@@ -2,7 +2,6 @@ package hr.algebra.jw.Controller;
 
 import hr.algebra.jw.Dto.ProductDto;
 import hr.algebra.jw.Model.Product;
-import hr.algebra.jw.Services.CategoryService;
 import hr.algebra.jw.Services.ProductService;
 import hr.algebra.jw.Repositories.ProductRepository;
 import jakarta.validation.Valid;
@@ -43,14 +42,14 @@ public class ProductController {
     public String addProduct(Model model) {
         ProductDto productDto = new ProductDto();
         model.addAttribute("productDto", productDto);
-        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("categories", productService.findAllCategories());
         return "admin/products/create";
     }
 
     @PostMapping("/create")
     public String addProduct(Model model,@Valid @ModelAttribute ProductDto productDto,
                              BindingResult result) {
-        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("categories", productService.findAllCategories());
 
         if (productDto.getImageFile().isEmpty()) {
             result.addError(new FieldError("productDto", "imageFile", "The image file cannot be empty"));
@@ -88,7 +87,7 @@ public class ProductController {
     public String editProduct(Model model, @RequestParam Long id) {
 
         try {
-            model.addAttribute("categories", productService.getAllCategories());
+            model.addAttribute("categories", productService.findAllCategories());
             Product product = productRepository.findById(id).get();
             ProductDto productDto = new ProductDto();
             productDto.setName(product.getName());
@@ -109,7 +108,7 @@ public class ProductController {
 
         try {
             Product product = productRepository.findById(id).get();
-            model.addAttribute("categories", productService.getAllCategories());
+            model.addAttribute("categories", productService.findAllCategories());
             model.addAttribute("product", product);
 
             if (result.hasErrors()) {
@@ -127,15 +126,17 @@ public class ProductController {
 
                     String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
                     productDto.setImageFileName(storageFileName);
-                    productDto.setCreatedAt(createdAt);
+
                     try (InputStream inputStream = image.getInputStream()) {
                         Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            }else {
+                productDto.setImageFileName(product.getImageFileName());
             }
-
+            productDto.setCreatedAt(product.getCreatedAt());
             productService.update(productDto, product.getId());
 
         } catch (Exception e) {
@@ -149,7 +150,7 @@ public class ProductController {
     @GetMapping("/details")
     public String showProduct(Model model, @RequestParam Long id) {
         try {
-            model.addAttribute("categories", productService.getAllCategories());
+            model.addAttribute("categories", productService.findAllCategories());
             Product product = productRepository.findById(id).get();
             model.addAttribute("product", product);
         } catch (Exception e) {

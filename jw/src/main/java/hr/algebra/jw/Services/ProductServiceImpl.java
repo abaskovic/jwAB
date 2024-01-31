@@ -6,6 +6,7 @@ import hr.algebra.jw.Model.Product;
 import hr.algebra.jw.Repositories.CategoryRepository;
 import hr.algebra.jw.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +43,8 @@ public class ProductServiceImpl implements ProductService {
         return repository.save(existingProduct);
     }
 
-    public List<Category> getAllCategories(){
+    public List<Category> findAllCategories(){
         return categoryRepository.findAll();
     }
+
 }

@@ -33,7 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(c-> c.disable())
                 .authorizeHttpRequests(request -> request.requestMatchers("admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("user/**").hasAuthority("USER").requestMatchers("register", "css/**", "shop/**", "/image/**")
+                        .requestMatchers("user/**").hasAuthority("USER").requestMatchers( "/**")
                         .permitAll().anyRequest().authenticated())
                 .formLogin(form-> form.loginPage("/login").loginProcessingUrl("/login").successHandler(customSuccessHandler).permitAll())
                 .logout(form -> form.invalidateHttpSession(true).clearAuthentication(true)
