@@ -1,35 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>User Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 56px;
-        }
-
-        @media (min-width: 768px) {
-            body {
-                padding-top: 80px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{../../css/style.css}">
 </head>
 <body>
-
-<!-- Navbar -->
 <div th:include="fragments/admin-header :: header"></div>
+
 
 <!-- Page Content -->
 <div class="container-fluid">
 
     <div class="row">
 
-
         <!-- Main Content -->
-        <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-md-4">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-12 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">ADMIN Dashboard</h1>
                 <h2 class="h3">Welcome, [[${user.getFullname()}]]</h2>

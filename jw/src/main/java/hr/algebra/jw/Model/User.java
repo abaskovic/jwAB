@@ -20,6 +20,12 @@ public class User {
     private String role;
     private String fullname;
 
+    @Override
+    public String toString() {
+        return
+                 fullname  +
+                " - "  +email ;
+    }
 
     public User(String email, String password, String role, String fullname) {
         this.email = email;
