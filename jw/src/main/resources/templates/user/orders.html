@@ -38,7 +38,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="order : ${orders}">
-                        <td th:text="${#dates.format(order.orderTime, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td th:text="${order.orderTime}"></td>
                         <td th:text="${order.address}"></td>
                         <td th:text="${order.postalCode}"></td>
                         <td th:text="${order.paymentMethod}"></td>

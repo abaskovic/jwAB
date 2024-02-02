@@ -1,11 +1,10 @@
 package hr.algebra.jw.Services;
 
-import hr.algebra.jw.Dto.CategoryDto;
 import hr.algebra.jw.Dto.OrderDto;
-import hr.algebra.jw.Model.Category;
 import hr.algebra.jw.Model.Order;
-import hr.algebra.jw.Model.User;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface OrderService {
@@ -13,4 +12,7 @@ public interface OrderService {
 
     List<Order> findByLoggedUser ();
 
+    List<Order> searchOrdersByCustomerName(String customerName);
+
+    List<Order> searchOrdersByDate(LocalDate startDate, LocalDate endDate);
 }

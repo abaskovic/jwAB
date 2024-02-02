@@ -1,10 +1,8 @@
 package hr.algebra.jw.Services;
 
-import hr.algebra.jw.Dto.CategoryDto;
 import hr.algebra.jw.Dto.OrderDto;
 import hr.algebra.jw.Dto.OrderItemDto;
 import hr.algebra.jw.Model.*;
-import hr.algebra.jw.Repositories.CategoryRepository;
 import hr.algebra.jw.Repositories.OrderRepository;
 import hr.algebra.jw.Repositories.ProductRepository;
 import hr.algebra.jw.Repositories.UserRepository;
@@ -13,6 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,18 +28,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
-    private  List<CartItem> convertOrderItemsToCartItems(List<OrderItemDto> dto) {
+    private List<CartItem> convertOrderItemsToCartItems(List<OrderItemDto> dto) {
         List<CartItem> cartItems = dto.stream()
                 .map(item -> {
-                    CartItem cartItem  = new CartItem();
+                    CartItem cartItem = new CartItem();
                     Product product = productRepository.findById(item.getProductId()).get();
                     cartItem.setProduct(product);
                     cartItem.setQuantity(item.getQuantity());
-                    return  cartItem;
+                    return cartItem;
                 }).collect(Collectors.toList());
         return cartItems;
     }
+
     public OrderItem fromDto(OrderItemDto orderItemDto) {
         OrderItem orderItem = new OrderItem();
         orderItem.setQuantity(orderItemDto.getQuantity());
@@ -52,18 +56,18 @@ public class OrderServiceImpl implements OrderService {
         String currentUsername = authentication.getName();
         return userRepository.findByEmail(currentUsername);
     }
+
     @Override
     public Order save(OrderDto dto) {
 
 
-
         List<OrderItem> orderItems = dto.getOrderItems().stream()
-                .map(order ->{
-                    return  fromDto(order);
+                .map(order -> {
+                    return fromDto(order);
                 })
                 .collect(Collectors.toList());
 
-        Order order =new Order();
+        Order order = new Order();
         order.setCartItems(orderItems);
         order.setOrderTime(dto.getOrderTime());
         order.setAddress(dto.getAddress());
@@ -79,4 +83,26 @@ public class OrderServiceImpl implements OrderService {
         return repository.findByUserId((loggedUser().getId())).stream().toList();
     }
 
+
+
+    public List<Order> searchOrdersByCustomerName(String customerName) {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream()
+                .filter(order -> order.getUser() != null && order.getUser().getFullname() != null &&
+                        order.getUser().getFullname().startsWith(customerName))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Order> searchOrdersByDate(LocalDate startDate, LocalDate endDate) {
+        List<Order> orders = orderRepository.findAll();
+        System.out.println(startDate);
+        System.out.println(endDate);
+        return orders.stream()
+                .filter(order -> {
+                    return order.getOrderTime() != null && !order.getOrderTime().isBefore(startDate) && !order.getOrderTime().isAfter(endDate);
+                })
+                .collect(Collectors.toList());
+    }
 }
